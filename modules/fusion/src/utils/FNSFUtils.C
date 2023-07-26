@@ -9,14 +9,11 @@
 
 #include "FNSFUtils.h"
 #include "MooseError.h"
-
-namespace FNSF
-{
+#include "Designs.h"
 
 Point
-torus(Real xi, Real R0 = 4.8, Real a = 1.2, Real tau = 0.63, Real k = 2.2)
+torus(Real xi, Real R0, Real a, Real tau, Real b)
 {
-  const Real b{a * k};
   xi *= M_PI / 180.0;
   Real R = R0 + a * std::cos(xi + tau * std::sin(xi));
   Real z = b * std::sin(xi);
@@ -24,9 +21,8 @@ torus(Real xi, Real R0 = 4.8, Real a = 1.2, Real tau = 0.63, Real k = 2.2)
 }
 
 Point
-orthogonal(Real xi, Real R0 = 4.8, Real a = 1.2, Real tau = 0.63, Real k = 2.2)
+orthogonal(Real xi, Real a, Real tau, Real b)
 {
-  const Real b{a * k};
   xi *= M_PI / 180.0;
   return {b * std::cos(xi), 0, a * std::sin(xi + tau * std::sin(xi)) * (1 + tau * std::cos(xi))};
 }
@@ -52,9 +48,9 @@ find_xi_depth(Real r, Real z)
 
     // Get the (r, z) coords of this xi at zero depth (coords that lie on the
     // last closed flux surface) and the orthogonal vector.
-    Point rz_lcfs = torus(xi_mid);
-    Point orthog = orthogonal(xi_mid);
-
+    Point rz_lcfs = torus(xi_mid, R0, a, tau, b);
+    Point orthog = orthogonal(xi_mid, a, tau, b);
+      
     // Project the target (r, z) location onto the line that extends outwards
     // from the LCFS at xi = xi_mid.
     Point delta_mid = rz - rz_lcfs;
@@ -88,5 +84,3 @@ find_xi_depth(Real r, Real z)
   mooseError("Failed to find extrapolated Miller coordinates for a point");
   return {0, 0};
 }
-
-} // namespace FNSF

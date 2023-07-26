@@ -9,8 +9,7 @@
 
 #include "FNSFOBExpHeatSource.h"
 #include "FNSFUtils.h"
-
-using namespace FNSF;
+#include "Designs.h"
 
 registerMooseObject("MooseApp", FNSFOBExpHeatSource);
 

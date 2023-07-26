@@ -6,22 +6,18 @@
 //*
 //* Licensed under LGPL 2.1, please see LICENSE for details
 //* https://www.gnu.org/licenses/lgpl-2.1.html
-
+#pragma once
 #include "libmesh/libmesh_common.h"
 #include "libmesh/point.h"
 
 using namespace libMesh;
 
-/**
- * Parametric definition of plasma shape (x-z plane cross-section)
- */
-Point torus(Real xi, Real R0, Real a, Real tau, Real b);
-/**
- * Orthogonal vector
- */
-Point orthogonal(Real xi,Real a, Real tau, Real b);
+struct variables{
+    Real R0; //Major radius, m
+    Real a; // Minor radius, m
+    Real tau; // triangularity
+    Real k; // elongation
+    Real b;
+};
 
-/**
- * Convert (r, z) coordinates to (xi, depth)
- */
-std::pair<Real, Real> find_xi_depth(Real r, Real z);
+extern variables FNSF;

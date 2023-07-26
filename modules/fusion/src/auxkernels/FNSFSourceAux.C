@@ -9,8 +9,7 @@
 
 #include "FNSFSourceAux.h"
 #include "FNSFUtils.h"
-
-using namespace FNSF;
+#include "Designs.h"
 
 registerMooseObject("MooseApp", FNSFSourceAux);
 
@@ -80,6 +79,11 @@ FNSFSourceAux::validParams()
       "Grid of depth values (perpendicular distance from the last closed flux surface) for the "
       "outboard blanket.");
   params.addRequiredParam<std::vector<Real>>("source", "Source generation values for each cell.");
+  params.addRequiredParam<MooseEnum>("Design", "Design of blanket used in simulation");
+  params.addParam<Real>("R0", 4.8, "Major Radius, m");
+  params.addParam<Real>("a", 1.2, "Minor Radius, m");
+  params.addParam<Real>("tau", 0.63, "triangularity");
+  params.addParam<Real>("k", 2.2, "elongation");
   return params;
 }
 
@@ -88,13 +92,28 @@ FNSFSourceAux::FNSFSourceAux(const InputParameters & parameters)
     _inner_xi_grid(getParam<std::vector<Real>>("inner_xi")),
     _outer_xi_grid(getParam<std::vector<Real>>("outer_xi")),
     _depth_grid(getParam<std::vector<Real>>("depth")),
-    _source(getParam<std::vector<Real>>("source"))
+    _source(getParam<std::vector<Real>>("source")),
+    _design(getParam<MooseEnum>("Design")),
+    _R0(getParam<Real>("R0")),
+    _a(getParam<Real>("a")),
+    _tau(getParam<Real>("tau")),
+    _k(getParam<Real>("k"))
 {
 }
 
 Real
 FNSFSourceAux::computeValue()
 {
+  switch(_design)
+  {
+    case 'FNSF' : 
+      R0 = FNSF.R0; a = FNSF.a; tau = FNSF.tau; k = FNSF.k; b = FNSF.b;
+      break;
+    case 'custom' :
+      R0 = _R0; a = _a; tau = _tau; k = _k; b = _a*_k;
+      break;
+  }
+
   const Point p = _q_point[_qp];
   Real r = std::sqrt(p(0) * p(0) + p(1) * p(1));
   Real z = p(2);

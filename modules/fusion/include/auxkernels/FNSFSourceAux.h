@@ -19,8 +19,11 @@ public:
   FNSFSourceAux(const InputParameters & parameters);
 
 protected:
-  virtual Real computeValue() override;
-
+  const MooseEnum & _design;
+  const Real & _R0; 
+  const Real & _a; 
+  const Real & _tau;
+  const Real & _k;
   std::pair<int, int> index_xi_depth(Real xi,
                                      Real depth,
                                      const std::vector<Real> & inner_xi_grid,

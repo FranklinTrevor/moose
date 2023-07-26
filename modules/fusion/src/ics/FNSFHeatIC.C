@@ -9,8 +9,7 @@
 
 #include "FNSFHeatIC.h"
 #include "FNSFUtils.h"
-
-using namespace FNSF;
+#include "Designs.h"
 
 registerMooseObject("MooseApp", FNSFHeatIC);
 
