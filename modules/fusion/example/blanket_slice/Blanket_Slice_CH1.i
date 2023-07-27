@@ -86,7 +86,7 @@ D_h = ${fparse (4*area)/wetted_perimeter}
   # components for the moderator channel
   [channel]
     type = FilePipe1Phase
-    csv_file = 'csv_pipes/Pipe_CH1.csv'
+    csv_file = 'Pipe_Ch1.csv'
     A = ${area}
     D_h = ${D_h}
     fp = h2

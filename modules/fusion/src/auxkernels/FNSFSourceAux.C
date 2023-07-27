@@ -22,7 +22,7 @@ FNSFSourceAux::index_xi_depth(Real xi,
 {
   // Perform a linear search to find the index of the given depth on the grid.
   // Compute the fractional location of the given value on the depth grid.
-  int i_depth;
+  unsigned long i_depth;
   Real frac;
   if (depth < depth_grid.front())
   {
@@ -44,7 +44,7 @@ FNSFSourceAux::index_xi_depth(Real xi,
 
   // Perform a linear search to find the index of the given xi.  Use a linear
   // interpolation between the outer and inner grids (based on the depth).
-  int i_xi;
+  unsigned long i_xi;
   if (xi < outer_xi_grid.front())
   {
     i_xi = 0;
@@ -89,34 +89,38 @@ FNSFSourceAux::validParams()
 
 FNSFSourceAux::FNSFSourceAux(const InputParameters & parameters)
   : AuxKernel(parameters),
-    _inner_xi_grid(getParam<std::vector<Real>>("inner_xi")),
-    _outer_xi_grid(getParam<std::vector<Real>>("outer_xi")),
-    _depth_grid(getParam<std::vector<Real>>("depth")),
-    _source(getParam<std::vector<Real>>("source")),
     _design(getParam<MooseEnum>("Design")),
     _R0(getParam<Real>("R0")),
     _a(getParam<Real>("a")),
     _tau(getParam<Real>("tau")),
-    _k(getParam<Real>("k"))
+    _k(getParam<Real>("k")),
+    _inner_xi_grid(getParam<std::vector<Real>>("inner_xi")),
+    _outer_xi_grid(getParam<std::vector<Real>>("outer_xi")),
+    _depth_grid(getParam<std::vector<Real>>("depth")),
+    _source(getParam<std::vector<Real>>("source"))
 {
 }
+
+namespace Cases {
+  enum CasesEnum {FNSF, Custom};
+};
 
 Real
 FNSFSourceAux::computeValue()
 {
-  switch(_design)
-  {
-    case 'FNSF' : 
-      R0 = FNSF.R0; a = FNSF.a; tau = FNSF.tau; k = FNSF.k; b = FNSF.b;
-      break;
-    case 'custom' :
-      R0 = _R0; a = _a; tau = _tau; k = _k; b = _a*_k;
-      break;
-  }
-
   const Point p = _q_point[_qp];
   Real r = std::sqrt(p(0) * p(0) + p(1) * p(1));
   Real z = p(2);
+
+  switch(_design)
+  {
+    case Cases::FNSF: 
+      R0 = FNSF.R0; a = FNSF.a; tau = FNSF.tau; k = FNSF.k; b = FNSF.b;
+      break;
+    case Cases::Custom:
+      R0 = _R0; a = _a; tau = _tau; k = _k; b = _a*_k;
+      break;
+  }
 
   Real xi, depth;
   std::tie(xi, depth) = find_xi_depth(r, z);

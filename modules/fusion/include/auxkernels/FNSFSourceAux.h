@@ -34,4 +34,6 @@ protected:
   std::vector<Real> _outer_xi_grid;
   std::vector<Real> _depth_grid;
   std::vector<Real> _source;
+
+  Real computeValue();
 };

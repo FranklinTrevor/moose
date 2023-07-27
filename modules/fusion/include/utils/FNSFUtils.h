@@ -12,6 +12,11 @@
 
 using namespace libMesh;
 
+extern Real R0;
+extern Real a;
+extern Real tau;
+extern Real k;
+extern Real b;
 /**
  * Parametric definition of plasma shape (x-z plane cross-section)
  */
@@ -19,7 +24,7 @@ Point torus(Real xi, Real R0, Real a, Real tau, Real b);
 /**
  * Orthogonal vector
  */
-Point orthogonal(Real xi,Real a, Real tau, Real b);
+Point orthogonal(Real xi, Real a, Real tau, Real b);
 
 /**
  * Convert (r, z) coordinates to (xi, depth)
