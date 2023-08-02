@@ -20,7 +20,7 @@ public:
 
 protected:
   const MooseEnum & _design;
-  const Real & _R0; 
+  const Real & _h; 
   const Real & _a; 
   const Real & _tau;
   const Real & _k;

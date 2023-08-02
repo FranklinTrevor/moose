@@ -90,7 +90,7 @@ FNSFSourceAux::validParams()
 FNSFSourceAux::FNSFSourceAux(const InputParameters & parameters)
   : AuxKernel(parameters),
     _design(getParam<MooseEnum>("Design")),
-    _R0(getParam<Real>("R0")),
+    _h(getParam<Real>("R0")),
     _a(getParam<Real>("a")),
     _tau(getParam<Real>("tau")),
     _k(getParam<Real>("k")),
@@ -118,7 +118,7 @@ FNSFSourceAux::computeValue()
       R0 = FNSF.R0; a = FNSF.a; tau = FNSF.tau; k = FNSF.k; b = FNSF.b;
       break;
     case Cases::Custom:
-      R0 = _R0; a = _a; tau = _tau; k = _k; b = _a*_k;
+      R0 = _h; a = _a; tau = _tau; k = _k; b = _a*_k;
       break;
   }
 
