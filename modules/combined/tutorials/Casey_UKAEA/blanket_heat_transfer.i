@@ -131,13 +131,6 @@
     #boundary = 'CH1 CH2'
     #value = 620
   #[]
-  [channel]
-    type = CoupledConvectiveHeatFluxBC
-    variable = T
-    htc = htc
-    T_infinity = Tfluid
-    boundary = 'CH1 CH2'
-  []
 []
 
 [Materials]
